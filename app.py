@@ -1,11 +1,8 @@
+from flask import Flask, render_template, send_from_directory, request
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
 import numpy as np
-from flask import Flask, render_template, send_from_directory, request
-import os
-
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -72,20 +69,17 @@ def plot3d():
         )
     )
     fig = go.Figure(data=data, layout=layout)
-    plotly.offline.plot(fig, filename='simple-3d-scatter')
-    return send_from_directory('C:/Users/Sachin/PycharmProjects/MCproject/', 'simple-3d-scatter.html')
+    return plotly.offline.plot(fig, filename='simple-3d-scatter', output_type="div")
+
+
 
 @app.route('/')
 def homepage():
-    print "home"
     return "home"
 
-@app.route('/plot', methods = ['POST'])
+
+@app.route('/plot')
 def plot():
-    if request.method == 'POST':
-        file = request.files['file']
-        file.save(secure_filename(file.filename))
-        print file
     return plot3d()
 
 
